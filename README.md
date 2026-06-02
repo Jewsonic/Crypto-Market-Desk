@@ -52,6 +52,12 @@ gh repo create crypto-quotes-dashboard --public --source=. --remote=origin --pus
 
 ## Vercel
 
+Deploy atual:
+
+```text
+https://crypto-quotes-dashboard.vercel.app
+```
+
 Build command:
 
 ```bash
