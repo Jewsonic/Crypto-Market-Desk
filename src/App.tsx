@@ -130,9 +130,9 @@ function App() {
       <section className="hero">
         <div>
           <p className="eyebrow">Crypto Market Desk</p>
-          <h1>Painel de cotacao de criptomoedas</h1>
+          <h1>Cotação de Criptomoedas em Tempo Real</h1>
           <p className="hero-copy">
-            Acompanhe precos, volume, valor de mercado e variacao diaria das principais
+            Acompanhe preços, volume, valor de mercado e variação diária das principais
             moedas em uma tela pronta para evoluir para alertas, carteira e analytics.
           </p>
         </div>
@@ -161,7 +161,7 @@ function App() {
         </article>
         <article>
           <TrendingUp size={22} />
-          <span>Variacao media 24h</span>
+          <span>Variação média 24h</span>
           <strong className={averageChange >= 0 ? 'up' : 'down'}>{formatPercent(averageChange)}</strong>
         </article>
       </section>
@@ -208,8 +208,8 @@ function App() {
           </label>
         </div>
 
-        {error ? <div className="status error">Erro ao carregar cotacoes: {error}</div> : null}
-        {loading ? <div className="status">Carregando cotacoes...</div> : null}
+        {error ? <div className="status error">Erro ao carregar cotações: {error}</div> : null}
+        {loading ? <div className="status">Carregando cotações...</div> : null}
 
         <div className="table-wrap">
           <table>
@@ -217,11 +217,11 @@ function App() {
               <tr>
                 <th>#</th>
                 <th>Ativo</th>
-                <th>Preco</th>
+                <th>Preço</th>
                 <th>24h</th>
                 <th>Volume</th>
                 <th>Market cap</th>
-                <th>Tendencia 7d</th>
+                <th>Tendência 7d</th>
               </tr>
             </thead>
             <tbody>

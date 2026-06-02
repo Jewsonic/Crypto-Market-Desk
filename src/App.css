@@ -1,24 +1,31 @@
 .dashboard {
   width: min(1180px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 32px 0 48px;
+  padding: 30px 0 56px;
 }
 
 .hero {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 24px;
-  align-items: end;
-  padding: 18px 0 28px;
+  align-items: center;
+  min-height: 300px;
+  padding: 26px 0 32px;
 }
 
 .eyebrow {
-  margin: 0 0 8px;
-  color: #06a67e;
+  width: fit-content;
+  margin: 0 0 14px;
+  border: 1px solid rgba(7, 137, 101, 0.22);
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.72);
+  color: #087a61;
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0;
   text-transform: uppercase;
+  backdrop-filter: blur(12px);
 }
 
 h1,
@@ -28,11 +35,12 @@ p {
 }
 
 h1 {
-  max-width: 760px;
-  color: #151922;
-  font-size: clamp(34px, 6vw, 64px);
-  line-height: 0.98;
+  max-width: 820px;
+  color: #121620;
+  font-size: clamp(36px, 6vw, 68px);
+  line-height: 0.96;
   letter-spacing: 0;
+  text-wrap: balance;
 }
 
 h2 {
@@ -43,17 +51,24 @@ h2 {
 }
 
 .hero-copy {
-  max-width: 700px;
-  margin-top: 18px;
-  color: #5f6878;
+  max-width: 720px;
+  margin-top: 20px;
+  color: #4f5a69;
   font-size: 17px;
+  font-weight: 520;
 }
 
 .hero-actions {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 10px;
+  gap: 12px;
+  border: 1px solid rgba(220, 226, 235, 0.88);
+  border-radius: 8px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.74);
+  box-shadow: 0 18px 44px rgba(35, 44, 58, 0.1);
+  backdrop-filter: blur(16px);
 }
 
 .primary-button {
@@ -65,11 +80,21 @@ h2 {
   border: 0;
   border-radius: 8px;
   padding: 0 18px;
-  background: #151922;
+  background: #121620;
   color: #ffffff;
   font: inherit;
   font-weight: 800;
   cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.primary-button:hover {
+  background: #0b765d;
+  box-shadow: 0 10px 24px rgba(11, 118, 93, 0.28);
+  transform: translateY(-1px);
 }
 
 .primary-button:disabled {
@@ -82,34 +107,46 @@ h2 {
 }
 
 .timestamp {
-  color: #697386;
+  color: #5f6878;
   font-size: 13px;
+  font-weight: 700;
 }
 
 .metrics {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin: 8px 0 16px;
+  gap: 14px;
+  margin: 0 0 16px;
 }
 
 .metrics article,
 .leader-card,
 .market-panel {
-  border: 1px solid #dde3ee;
+  border: 1px solid rgba(215, 223, 232, 0.92);
   border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 18px 50px rgba(38, 47, 68, 0.08);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 18px 50px rgba(38, 47, 68, 0.09);
+  backdrop-filter: blur(14px);
 }
 
 .metrics article {
   display: grid;
   gap: 10px;
-  padding: 18px;
+  position: relative;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.metrics article::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, #087a61, #d98828);
 }
 
 .metrics svg {
-  color: #06a67e;
+  color: #087a61;
 }
 
 .metrics span,
@@ -118,10 +155,11 @@ h2 {
 .asset-cell span {
   color: #6f7888;
   font-size: 13px;
+  font-weight: 700;
 }
 
 .metrics strong {
-  color: #151922;
+  color: #121620;
   font-size: 28px;
   line-height: 1;
 }
@@ -129,7 +167,7 @@ h2 {
 .leaders {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  gap: 14px;
   margin-bottom: 16px;
 }
 
@@ -138,7 +176,17 @@ h2 {
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  padding: 18px;
+  padding: 18px 20px;
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.leader-card:hover {
+  border-color: rgba(8, 122, 97, 0.36);
+  box-shadow: 0 22px 58px rgba(38, 47, 68, 0.13);
+  transform: translateY(-2px);
 }
 
 .coin-title,
@@ -153,13 +201,15 @@ h2 {
 .asset-cell img {
   width: 34px;
   height: 34px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 5px rgba(238, 243, 248, 0.9);
 }
 
 .coin-title strong,
 .asset-cell strong {
   display: block;
   overflow: hidden;
-  color: #151922;
+  color: #121620;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -172,7 +222,7 @@ h2 {
 }
 
 .leader-price > span {
-  color: #151922;
+  color: #121620;
   font-size: 18px;
   font-weight: 900;
 }
@@ -187,11 +237,11 @@ h2 {
 }
 
 .up {
-  color: #078965;
+  color: #087a61;
 }
 
 .down {
-  color: #c43a3a;
+  color: #b8323d;
 }
 
 .market-panel {
@@ -203,8 +253,9 @@ h2 {
   align-items: center;
   justify-content: space-between;
   gap: 18px;
-  padding: 18px;
-  border-bottom: 1px solid #e7ebf2;
+  padding: 20px;
+  border-bottom: 1px solid #e4eaf2;
+  background: rgba(248, 250, 252, 0.78);
 }
 
 .search-field {
@@ -216,8 +267,16 @@ h2 {
   border: 1px solid #d9e0ea;
   border-radius: 8px;
   padding: 0 12px;
-  background: #f8fafc;
+  background: #ffffff;
   color: #667085;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.search-field:focus-within {
+  border-color: rgba(8, 122, 97, 0.48);
+  box-shadow: 0 0 0 4px rgba(8, 122, 97, 0.1);
 }
 
 .search-field input {
@@ -225,7 +284,7 @@ h2 {
   border: 0;
   outline: 0;
   background: transparent;
-  color: #151922;
+  color: #121620;
   font: inherit;
 }
 
@@ -255,14 +314,15 @@ table {
 
 th,
 td {
-  padding: 14px 18px;
+  padding: 15px 20px;
   border-bottom: 1px solid #edf1f6;
   text-align: left;
   white-space: nowrap;
 }
 
 th {
-  color: #6c7585;
+  background: #fbfcfe;
+  color: #657083;
   font-size: 12px;
   font-weight: 900;
   text-transform: uppercase;
@@ -274,7 +334,7 @@ td {
 }
 
 tbody tr:hover {
-  background: #f8fafc;
+  background: rgba(238, 247, 244, 0.72);
 }
 
 .sparkline {
@@ -290,11 +350,11 @@ tbody tr:hover {
 }
 
 .sparkline .positive {
-  stroke: #078965;
+  stroke: #087a61;
 }
 
 .sparkline .negative {
-  stroke: #c43a3a;
+  stroke: #b8323d;
 }
 
 @keyframes spin {
@@ -306,7 +366,7 @@ tbody tr:hover {
 @media (max-width: 820px) {
   .dashboard {
     width: min(100% - 20px, 1180px);
-    padding-top: 16px;
+    padding-top: 14px;
   }
 
   .hero,
@@ -317,6 +377,8 @@ tbody tr:hover {
 
   .hero {
     display: grid;
+    min-height: auto;
+    padding-top: 18px;
   }
 
   .hero-actions {
