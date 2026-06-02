@@ -71,6 +71,39 @@ h2 {
   backdrop-filter: blur(16px);
 }
 
+.currency-toggle {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
+  min-width: 184px;
+  border: 1px solid #d9e0ea;
+  border-radius: 8px;
+  padding: 3px;
+  background: #eef3f8;
+}
+
+.currency-toggle button {
+  min-height: 34px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #667085;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.currency-toggle button.active {
+  background: #ffffff;
+  color: #087a61;
+  box-shadow: 0 6px 18px rgba(38, 47, 68, 0.12);
+}
+
 .primary-button {
   min-height: 44px;
   display: inline-flex;
@@ -164,6 +197,20 @@ h2 {
   line-height: 1;
 }
 
+.metric-value {
+  display: grid;
+  gap: 5px;
+}
+
+.metric-value small,
+.leader-price em,
+.money-stack span {
+  color: #7b8494;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 800;
+}
+
 .leaders {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -217,7 +264,7 @@ h2 {
 .leader-price {
   display: grid;
   justify-items: end;
-  gap: 4px;
+  gap: 3px;
   white-space: nowrap;
 }
 
@@ -331,6 +378,19 @@ th {
 td {
   color: #242b38;
   font-weight: 700;
+}
+
+td > strong,
+.money-stack strong {
+  color: #242b38;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.money-stack {
+  display: grid;
+  gap: 2px;
+  min-width: 126px;
 }
 
 tbody tr:hover {

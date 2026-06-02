@@ -25,21 +25,56 @@ type Coin = {
   }
 }
 
-const API_URL =
-  'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=30&page=1&sparkline=true&price_change_percentage=24h'
+type QuoteCurrency = 'brl' | 'usd'
 
-const currency = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  maximumFractionDigits: 2,
-})
+type MarketData = Record<QuoteCurrency, Coin[]>
 
-const compactCurrency = new Intl.NumberFormat('en-US', {
-  style: 'currency',
-  currency: 'USD',
-  notation: 'compact',
-  maximumFractionDigits: 2,
-})
+const quoteOptions: Array<{ code: QuoteCurrency; label: string }> = [
+  { code: 'brl', label: 'BRL' },
+  { code: 'usd', label: 'USD' },
+]
+
+const formatters = {
+  brl: {
+    currency: new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      maximumFractionDigits: 2,
+    }),
+    compact: new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      notation: 'compact',
+      maximumFractionDigits: 2,
+    }),
+  },
+  usd: {
+    currency: new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 2,
+    }),
+    compact: new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      notation: 'compact',
+      maximumFractionDigits: 2,
+    }),
+  },
+} satisfies Record<QuoteCurrency, Record<'currency' | 'compact', Intl.NumberFormat>>
+
+function buildApiUrl(currency: QuoteCurrency) {
+  const params = new URLSearchParams({
+    vs_currency: currency,
+    order: 'market_cap_desc',
+    per_page: '30',
+    page: '1',
+    sparkline: 'true',
+    price_change_percentage: '24h',
+  })
+
+  return `https://api.coingecko.com/api/v3/coins/markets?${params.toString()}`
+}
 
 function formatPercent(value: number | null) {
   if (value === null || Number.isNaN(value)) return '0.00%'
@@ -71,7 +106,8 @@ function SparklineChart({ values, positive }: { values: number[]; positive: bool
 }
 
 function App() {
-  const [coins, setCoins] = useState<Coin[]>([])
+  const [marketData, setMarketData] = useState<MarketData>({ brl: [], usd: [] })
+  const [quoteCurrency, setQuoteCurrency] = useState<QuoteCurrency>('brl')
   const [query, setQuery] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -82,17 +118,24 @@ function App() {
     setError('')
 
     try {
-      const response = await fetch(API_URL)
+      const [brlResponse, usdResponse] = await Promise.all([
+        fetch(buildApiUrl('brl')),
+        fetch(buildApiUrl('usd')),
+      ])
 
-      if (!response.ok) {
-        throw new Error(`CoinGecko returned HTTP ${response.status}`)
+      if (!brlResponse.ok || !usdResponse.ok) {
+        throw new Error('A CoinGecko retornou uma falha temporária.')
       }
 
-      const data = (await response.json()) as Coin[]
-      setCoins(data)
+      const [brl, usd] = (await Promise.all([
+        brlResponse.json(),
+        usdResponse.json(),
+      ])) as [Coin[], Coin[]]
+
+      setMarketData({ brl, usd })
       setLastUpdated(new Date())
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not load market data.')
+      setError(err instanceof Error ? err.message : 'Não foi possível carregar os dados.')
     } finally {
       setLoading(false)
     }
@@ -105,6 +148,12 @@ function App() {
 
     return () => window.clearTimeout(timeoutId)
   }, [])
+
+  const secondaryCurrency: QuoteCurrency = quoteCurrency === 'brl' ? 'usd' : 'brl'
+  const coins = marketData[quoteCurrency]
+  const secondaryCoinsById = useMemo(() => {
+    return new Map(marketData[secondaryCurrency].map((coin) => [coin.id, coin]))
+  }, [marketData, secondaryCurrency])
 
   const filteredCoins = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase()
@@ -121,9 +170,21 @@ function App() {
   const leaders = coins.slice(0, 3)
   const totalMarketCap = coins.reduce((sum, coin) => sum + coin.market_cap, 0)
   const totalVolume = coins.reduce((sum, coin) => sum + coin.total_volume, 0)
+  const secondaryTotalMarketCap = marketData[secondaryCurrency].reduce(
+    (sum, coin) => sum + coin.market_cap,
+    0,
+  )
+  const secondaryTotalVolume = marketData[secondaryCurrency].reduce(
+    (sum, coin) => sum + coin.total_volume,
+    0,
+  )
   const averageChange =
     coins.reduce((sum, coin) => sum + (coin.price_change_percentage_24h ?? 0), 0) /
     (coins.length || 1)
+  const currency = formatters[quoteCurrency].currency
+  const compactCurrency = formatters[quoteCurrency].compact
+  const secondaryCurrencyFormatter = formatters[secondaryCurrency].currency
+  const secondaryCompactCurrency = formatters[secondaryCurrency].compact
 
   return (
     <main className="dashboard">
@@ -138,6 +199,19 @@ function App() {
         </div>
 
         <div className="hero-actions">
+          <div className="currency-toggle" role="group" aria-label="Moeda principal">
+            {quoteOptions.map((option) => (
+              <button
+                key={option.code}
+                type="button"
+                className={quoteCurrency === option.code ? 'active' : ''}
+                onClick={() => setQuoteCurrency(option.code)}
+                aria-pressed={quoteCurrency === option.code}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
           <button type="button" className="primary-button" onClick={loadMarketData} disabled={loading}>
             <RefreshCw size={18} className={loading ? 'spinning' : ''} />
             Atualizar
@@ -152,12 +226,18 @@ function App() {
         <article>
           <CircleDollarSign size={22} />
           <span>Market cap monitorado</span>
-          <strong>{compactCurrency.format(totalMarketCap)}</strong>
+          <div className="metric-value">
+            <strong>{compactCurrency.format(totalMarketCap)}</strong>
+            <small>{secondaryCompactCurrency.format(secondaryTotalMarketCap)}</small>
+          </div>
         </article>
         <article>
           <Activity size={22} />
           <span>Volume 24h</span>
-          <strong>{compactCurrency.format(totalVolume)}</strong>
+          <div className="metric-value">
+            <strong>{compactCurrency.format(totalVolume)}</strong>
+            <small>{secondaryCompactCurrency.format(secondaryTotalVolume)}</small>
+          </div>
         </article>
         <article>
           <TrendingUp size={22} />
@@ -169,6 +249,7 @@ function App() {
       <section className="leaders" aria-label="Principais criptomoedas">
         {leaders.map((coin) => {
           const change = coin.price_change_percentage_24h ?? 0
+          const secondaryCoin = secondaryCoinsById.get(coin.id)
 
           return (
             <article key={coin.id} className="leader-card">
@@ -181,6 +262,9 @@ function App() {
               </div>
               <div className="leader-price">
                 <span>{currency.format(coin.current_price)}</span>
+                {secondaryCoin ? (
+                  <em>{secondaryCurrencyFormatter.format(secondaryCoin.current_price)}</em>
+                ) : null}
                 <small className={change >= 0 ? 'up' : 'down'}>
                   {change >= 0 ? <ArrowUpRight size={16} /> : <ArrowDownRight size={16} />}
                   {formatPercent(change)}
@@ -227,6 +311,7 @@ function App() {
             <tbody>
               {filteredCoins.map((coin) => {
                 const change = coin.price_change_percentage_24h ?? 0
+                const secondaryCoin = secondaryCoinsById.get(coin.id)
 
                 return (
                   <tr key={coin.id}>
@@ -240,10 +325,31 @@ function App() {
                         </div>
                       </div>
                     </td>
-                    <td>{currency.format(coin.current_price)}</td>
+                    <td>
+                      <div className="money-stack">
+                        <strong>{currency.format(coin.current_price)}</strong>
+                        {secondaryCoin ? (
+                          <span>{secondaryCurrencyFormatter.format(secondaryCoin.current_price)}</span>
+                        ) : null}
+                      </div>
+                    </td>
                     <td className={change >= 0 ? 'up' : 'down'}>{formatPercent(change)}</td>
-                    <td>{compactCurrency.format(coin.total_volume)}</td>
-                    <td>{compactCurrency.format(coin.market_cap)}</td>
+                    <td>
+                      <div className="money-stack">
+                        <strong>{compactCurrency.format(coin.total_volume)}</strong>
+                        {secondaryCoin ? (
+                          <span>{secondaryCompactCurrency.format(secondaryCoin.total_volume)}</span>
+                        ) : null}
+                      </div>
+                    </td>
+                    <td>
+                      <div className="money-stack">
+                        <strong>{compactCurrency.format(coin.market_cap)}</strong>
+                        {secondaryCoin ? (
+                          <span>{secondaryCompactCurrency.format(secondaryCoin.market_cap)}</span>
+                        ) : null}
+                      </div>
+                    </td>
                     <td>
                       <SparklineChart
                         values={coin.sparkline_in_7d?.price ?? []}

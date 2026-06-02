@@ -1,20 +1,43 @@
-# Crypto Quotes Dashboard
+# Crypto Market Desk
 
-Painel web para acompanhar cotações de criptomoedas em tempo real, criado com React, TypeScript e Vite.
+Painel web para acompanhar cotações de criptomoedas em tempo real, com visual limpo, alternância entre BRL/USD e uma leitura rápida dos principais indicadores do mercado.
+
+![Topo do painel de cotação de criptomoedas](docs/dashboard-top.png)
+
+## Acesse
+
+Produção: [https://crypto-market-desk.vercel.app/](https://crypto-market-desk.vercel.app/)
+
+## Recursos
+
+- Cotações em tempo real usando a CoinGecko Markets API
+- Alternância entre valores em reais e dólares
+- Valor secundário exibido em tamanho reduzido para comparação rápida
+- Cards de resumo com market cap, volume 24h e variação média
+- Destaque para as principais criptomoedas por valor de mercado
+- Tabela com busca, preço, volume, market cap e tendência de 7 dias
+- Layout responsivo com fundo visual em doodle pattern
 
 ## Stack
 
-- React + TypeScript
+- React
+- TypeScript
 - Vite
-- CoinGecko Markets API
-- Vercel para deploy inicial
-- AWS prevista para a próxima etapa de hospedagem/infra
+- CSS
+- lucide-react
+- Vercel
 
-## Rodando localmente
+## Rodando Localmente
 
 ```bash
 npm install
 npm run dev
+```
+
+Depois acesse:
+
+```text
+http://127.0.0.1:5173
 ```
 
 ## Scripts
@@ -26,37 +49,9 @@ npm run preview
 npm run lint
 ```
 
-## GitHub
+## Deploy
 
-Este diretório já pode ser versionado com Git. Para criar o repositório remoto:
-
-```bash
-git init
-git add .
-git commit -m "Initial crypto dashboard"
-```
-
-Depois crie um repositório no GitHub e conecte:
-
-```bash
-git remote add origin https://github.com/SEU_USUARIO/crypto-quotes-dashboard.git
-git branch -M main
-git push -u origin main
-```
-
-Se o GitHub CLI estiver instalado e autenticado, o fluxo mais rápido é:
-
-```bash
-gh repo create crypto-quotes-dashboard --public --source=. --remote=origin --push
-```
-
-## Vercel
-
-Deploy atual:
-
-```text
-https://crypto-quotes-dashboard.vercel.app
-```
+O projeto está configurado para deploy na Vercel.
 
 Build command:
 
@@ -66,24 +61,23 @@ npm run build
 
 Output directory:
 
-```bash
+```text
 dist
 ```
 
-Deploy via CLI:
+Deploy manual:
 
 ```bash
-vercel
 vercel --prod
 ```
 
-## Próxima etapa AWS
+## Próxima Etapa: AWS
 
-Para hospedar na AWS, o caminho mais simples para este frontend estático é:
+Para hospedar este frontend estático na AWS, o caminho recomendado é:
 
 - S3 para armazenar os arquivos gerados em `dist`
 - CloudFront como CDN
 - ACM para certificado TLS
-- Route 53 para DNS, se o dominio estiver na AWS
+- Route 53 para DNS, se o domínio estiver na AWS
 
-Quando o projeto precisar de cache, alertas ou carteira de usuário, podemos adicionar uma API em Lambda/API Gateway ou migrar para uma arquitetura com backend dedicado.
+Quando o projeto evoluir para alertas, cache, carteira de usuário ou autenticação, podemos adicionar uma API com Lambda/API Gateway ou migrar para um backend dedicado.
