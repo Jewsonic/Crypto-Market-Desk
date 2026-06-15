@@ -1,22 +1,6 @@
-# Crypto Market Desk
+# Vitor Dev | Sites One-Page
 
-Dashboard de criptomoedas em tempo real desenvolvido com React, TypeScript e Vite, consumindo dados da CoinGecko API.
-
-![Topo do painel de cotação de criptomoedas](docs/dashboard-top.png)
-
-## Acesse
-
-Produção: [https://crypto-market-desk.vercel.app/](https://crypto-market-desk.vercel.app/)
-
-## Funcionalidades
-
-- Cotações em tempo real usando a CoinGecko Markets API
-- Alternância entre valores em reais e dólares
-- Valor secundário exibido em tamanho reduzido para comparação rápida
-- Cards de resumo com market cap, volume 24h e variação média
-- Destaque para as principais criptomoedas por valor de mercado
-- Tabela com busca, preço, volume, market cap e tendência de 7 dias
-- Layout responsivo com fundo visual em doodle pattern
+Landing page comercial para vender o serviço de criação de sites one-page modernos, rápidos e responsivos.
 
 ## Stack
 
@@ -27,7 +11,7 @@ Produção: [https://crypto-market-desk.vercel.app/](https://crypto-market-desk.
 - lucide-react
 - Vercel
 
-## Rodando Localmente
+## Rodando localmente
 
 ```bash
 npm install
@@ -42,15 +26,14 @@ http://127.0.0.1:5173
 
 ## Scripts
 
-npm run dev      # ambiente local
-npm run build    # build produção
-npm run preview  # visualizar build
-npm run lint     # análise de código
+```bash
+npm run dev
+npm run build
+npm run preview
+npm run lint
+```
 
-## Deploy
-
-Produção:
-https://crypto-market-desk.vercel.app/
+## Deploy na Vercel
 
 Build command:
 
@@ -64,22 +47,8 @@ Output directory:
 dist
 ```
 
-Deploy manual:
+## Personalização
 
-```bash
-vercel --prod
-```
+Troque o número do WhatsApp em `src/App.tsx`, na constante `whatsappUrl`.
 
-## Próxima Etapa: AWS
-
-🎯 Roadmap
-
-- [x] Integração CoinGecko
-- [x] Busca de ativos
-- [x] Alternância BRL/USD
-- [x] Deploy Vercel
-- [ ] Dark Mode
-- [ ] Favoritos
-- [ ] Gráfico histórico
-- [ ] Integração AWS Lambda
-- [ ] Alertas de preço
+Também ajuste os preços e descrições dos planos no array `packages`, no mesmo arquivo.
