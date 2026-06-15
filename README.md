@@ -1,6 +1,22 @@
-# Vitor Dev | Sites One-Page
+# Crypto Market Desk
 
-Landing page comercial para vender o serviço de criação de sites one-page modernos, rápidos e responsivos.
+Dashboard de criptomoedas em tempo real desenvolvido com React, TypeScript e Vite, consumindo dados da CoinGecko API.
+
+![Topo do painel de cotação de criptomoedas](docs/dashboard-top.png)
+
+## Acesse
+
+Produção: [https://crypto-market-desk.vercel.app/](https://crypto-market-desk.vercel.app/)
+
+## Funcionalidades
+
+- Cotações em tempo real usando a CoinGecko Markets API
+- Alternância entre valores em reais e dólares
+- Valor secundário exibido em tamanho reduzido para comparação rápida
+- Cards de resumo com market cap, volume 24h e variação média
+- Destaque para as principais criptomoedas por valor de mercado
+- Tabela com busca, preço, volume, market cap e tendência de 7 dias
+- Layout responsivo com fundo visual em doodle pattern
 
 ## Stack
 
@@ -11,7 +27,7 @@ Landing page comercial para vender o serviço de criação de sites one-page mod
 - lucide-react
 - Vercel
 
-## Rodando localmente
+## Rodando Localmente
 
 ```bash
 npm install
@@ -26,14 +42,15 @@ http://127.0.0.1:5173
 
 ## Scripts
 
-```bash
-npm run dev
-npm run build
-npm run preview
-npm run lint
-```
+npm run dev      # ambiente local
+npm run build    # build produção
+npm run preview  # visualizar build
+npm run lint     # análise de código
 
-## Deploy na Vercel
+## Deploy
+
+Produção:
+https://crypto-market-desk.vercel.app/
 
 Build command:
 
@@ -47,8 +64,22 @@ Output directory:
 dist
 ```
 
-## Personalização
+Deploy manual:
 
-Troque o número do WhatsApp em `src/App.tsx`, na constante `whatsappUrl`.
+```bash
+vercel --prod
+```
 
-Também ajuste os preços e descrições dos planos no array `packages`, no mesmo arquivo.
+## Próxima Etapa: AWS
+
+🎯 Roadmap
+
+- [x] Integração CoinGecko
+- [x] Busca de ativos
+- [x] Alternância BRL/USD
+- [x] Deploy Vercel
+- [ ] Dark Mode
+- [ ] Favoritos
+- [ ] Gráfico histórico
+- [ ] Integração AWS Lambda
+- [ ] Alertas de preço
